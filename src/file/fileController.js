@@ -23,11 +23,12 @@ router.get("*", (req, res) => {
         console.error("Directory scan error:", err);
         return res.status(500).send("Unable to scan directory.");
       }
-
+      console.log(breadcrumbs);
       res.render("file-explorer.njk", {
         currentDirectory: chosenDirectory,
         fileList: fileList,
         breadcrumbs: breadcrumbs,
+        returnUrl: breadcrumbs.at(-2)?.path || "/",
       });
     });
   } else if (req.query.file) {

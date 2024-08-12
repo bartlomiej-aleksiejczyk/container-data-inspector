@@ -2,14 +2,14 @@
 <html>
   <head>
     <title>File Explorer</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
   </head>
   <body>
     <div class="topbar">
       <h1>File Explorer</h1>
       <form action="{{ req.originalUrl }}" method="get" class="nav-form">
         {% if breadcrumbs.length > 1 %}
-          <input type="hidden" name="dir" value="{{ breadcrumbs[-2].path }}">
+          <input type="hidden" name="dir" value="{{ returnUrl }}">
           <button class="nav-button" type="submit">Go Back</button>
         {% endif %}
       </form>
