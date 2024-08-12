@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>File Explorer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .topbar {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        margin: 0;
+        display: flex;
+        justify-content: space-between;
+      }
+      .nav-button {
+        background-color: #04aa6d; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 1.25rem;
+        height: 3.5rem;
+      }
+      #breadcrumb {
+        margin: 10px;
+        padding: 10px;
+        background-color: #e9e9e9;
+        border-radius: 5px;
+      }
+      #breadcrumb a {
+        text-decoration: none;
+        color: #007bff;
+        margin-right: 5px;
+      }
+      #breadcrumb a:hover {
+        text-decoration: underline;
+      }
+      #fileList {
+        list-style-type: none;
+        padding: 0;
+      }
+      #fileList li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+      }
+      #fileList li:hover {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="topbar">
+      <h1>File Explorer</h1>
+      <form action="{{ req.originalUrl }}" method="get" style="display:inline;">
+        {% if breadcrumbs.length > 1 %}
+          <input type="hidden" name="dir" value="{{ breadcrumbs[-2].path }}">
+          <button class="nav-button" type="submit">Go Back</button>
+        </form>
+      {% endif %}
+    </div>
+    <div id="breadcrumb">
+      {% for breadcrumb in breadcrumbs %}
+        <a href="?dir={{ breadcrumb.path }}">{{ breadcrumb.name }}</a>
+        {% if not loop.last %}
+          /
+        {% endif %}
+      {% endfor %}
+    </div>
+    <ul id="fileList">
+      {% for file in fileList %}
+        {% if file.isDirectory %}
+          <li style="font-weight: bold;">
+            <a href="?dir={{ file.path }}">{{ file.name }}</a>
+          </li>
+        {% else %}
+          <li>
+            <a href="?file={{ file.path }}">{{ file.name }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </body>
+</html>
