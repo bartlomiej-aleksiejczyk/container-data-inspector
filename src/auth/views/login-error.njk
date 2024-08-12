@@ -11,3 +11,9 @@
         <a href="/">Try Again</a>
     </body>
 </html>
+{% extends "base.njk" %}
+{% block content %}
+    <h1>Login Failed</h1>
+    <p>{{ error }}</p>
+    <a href="/">Try Again</a>
+{% endblock %}

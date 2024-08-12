@@ -1,39 +1,36 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>File Explorer</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
-  </head>
-  <body>
+{% extends "base-unstyled.njk" %}
+{% block extraCss %}
+  <link rel="stylesheet" type="text/css" href="/static/styles.css">
+  {% endblock %}
+  {% block content %}
     <div class="topbar">
       <h1>File Explorer</h1>
       <form action="{{ req.originalUrl }}" method="get" class="nav-form">
         {% if breadcrumbs.length > 1 %}
           <input type="hidden" name="dir" value="{{ returnUrl }}">
-          <button class="nav-button" type="submit">Go Back</button>
-        {% endif %}
-      </form>
-    </div>
-    <div class="breadcrumb">
-      {% for breadcrumb in breadcrumbs %}
-        <a href="?dir={{ breadcrumb.path }}">{{ breadcrumb.name }}</a>
-        {% if not loop.last %}
-          /
-        {% endif %}
-      {% endfor %}
-    </div>
-    <ul class="file-list">
-      {% for file in fileList %}
-        {% if file.isDirectory %}
-          <li class="directory-item">
-            <a href="?dir={{ file.path }}">{{ file.name }}</a>
-          </li>
-        {% else %}
-          <li class="file-item">
-            <a href="?file={{ file.path }}">{{ file.name }}</a>
-          </li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  </body>
-</html>
+            <button class="nav-button" type="submit">Go Back</button>
+          {% endif %}
+        </form>
+      </div>
+      <div class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+          <a href="?dir={{ breadcrumb.path }}">{{ breadcrumb.name }}</a>
+          {% if not loop.last %}
+            /
+          {% endif %}
+        {% endfor %}
+      </div>
+      <ul class="file-list">
+        {% for file in fileList %}
+          {% if file.isDirectory %}
+            <li class="directory-item">
+              <a href="?dir={{ file.path }}">{{ file.name }}</a>
+            </li>
+          {% else %}
+            <li class="file-item">
+              <a href="?file={{ file.path }}">{{ file.name }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endblock %}

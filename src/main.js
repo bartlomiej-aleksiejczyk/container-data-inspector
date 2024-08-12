@@ -10,7 +10,7 @@ import session from "express-session";
 const app = express();
 
 const PORT = 3000;
-const appNames = ["file", "common"];
+const appNames = ["file", "common", "auth"];
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -19,10 +19,12 @@ const viewPaths = appNames.map((appName) =>
   path.join(__dirname, appName, "views")
 );
 
-nunjucks.configure(viewPaths, {
+const nunjucksContext = nunjucks.configure(viewPaths, {
   autoescape: true,
   express: app,
 });
+
+nunjucksContext.addGlobal("siteName", "Data Inspector");
 
 if (process.env.SESSION_SECRET) {
   app.use(
@@ -30,23 +32,28 @@ if (process.env.SESSION_SECRET) {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: true },
+      cookie: { secure: false },
     })
   );
 }
 
 function isAuthenticated(req, res, next) {
+  console.log(req.session);
+
   if (process.env.SESSION_SECRET && req.session.user) {
+    console.log(req.session.user);
     return next();
   }
-  res
-    .status(401)
-    .send("Authentication is disabled or you are not authenticated");
+  res.redirect("/auth/login");
 }
 
 app.use("/static", express.static("public"));
 app.use("/auth", authRoutes);
 app.use("/file", isAuthenticated, fileRoutes);
+
+app.get("/", (req, res) => {
+  res.redirect("/file");
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

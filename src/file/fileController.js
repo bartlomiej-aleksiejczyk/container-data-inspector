@@ -25,6 +25,7 @@ router.get("*", (req, res) => {
       }
       console.log(breadcrumbs);
       res.render("file-explorer.njk", {
+        siteName: "File Explorer",
         currentDirectory: chosenDirectory,
         fileList: fileList,
         breadcrumbs: breadcrumbs,
